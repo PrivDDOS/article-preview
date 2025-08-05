@@ -68,12 +68,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-top: 30px;
+      padding-top: 60px;
       height: 100px;
     }
 
     .container .content .user img {
-      width: 60px;
+      width: 40px;
       border-radius: 50%;
     }
 
@@ -115,10 +115,14 @@
     .container .content .user .button .button-invisible {
       background-color: transparent;
       position: absolute;
-      width: 230px;
-      height: 64px;
-      bottom: 42px;
-      right: -90px;
+      display: none;
+      width: 80px;
+      height: 57px;
+      bottom: 32px;
+      right: -14px;
+      border-left: 41px solid transparent;
+      border-right: 41px solid transparent;
+      border-top: 43px solid hsl(217, 19%, 35%);
     }
     
     .container .content .user .button .button-hover {
@@ -126,10 +130,13 @@
       position: absolute;
       width: 230px;
       height: 64px;
-      background-color: hsl(214, 17%, 51%);
+      background-color: hsl(217, 19%, 35%);
       /* display: flex; add display: flex to make the hover box visible and none when not hover*/
+      align-items: center;
+      justify-content: center;
       bottom: 50px;
       right: -90px;
+      border-radius: 15px;
     }
 
     .container .content .user .button .button-hover p {
@@ -138,13 +145,20 @@
     }
 
     .container .content .user .button .button-hover img {
-      width: 30px;
-      height: 30px;
+      width: 24px;
+      height: 24px;
       border-radius: 4px;
     }
 
-    .attribution { font-size: 11px; text-align: center; }
+    .attribution { font-size: 11px; text-align: center; padding-top: 30px;}
     .attribution a { color: hsl(228, 45%, 44%); }
+
+    /* Create class for the mobile share button hover*/
+    .share-mobile {
+      align-items: center;
+      background-color: hsl(214, 17%, 51%);
+      border-radius: 0 0 8px 8px;
+    }
 
     @media screen and (max-width: 756px) {
       body {
@@ -208,6 +222,35 @@
         border-radius: 0 0 0 10px;
       }
 
+      .container .content .user-section .button-hover-mobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        margin-top: 40px;
+        height: 66px;
+      }
+
+      .container .content .user-section .button-hover-mobile p {
+        color: white;
+        letter-spacing: 6px;
+      }
+
+      .container .content .user-section .button-hover-mobile .mobile-btn {
+        background-color: hsl(214, 17%, 51%);
+        border: none;
+      }
+
+      .container .content .user-section .button-hover-mobile .share-icon-mobile {
+        width: 20px;
+        height: 20px;
+        background-image: url(./images/icon-share.svg);
+        background-repeat: no-repeat;
+        background-size: 18px;
+        background-position: center;
+        filter: brightness(0) invert(1);
+      }
+
     }
   </style>
 </head>
@@ -228,28 +271,32 @@
         it felt slightly bare and uninviting. I’ve got some simple tips 
         to help you make any room feel complete.
       </p>
+       
+      <!-- Create container for the user area so that we can delete the user and replace with the new div.share-mobile-->
 
-      <div class="user">
-        <img src="./images/avatar-michelle.jpg" alt="avatar">
-        <div class="user-info">
-          <h1>Michelle Appleton</h1>
-          <p>28 Jun 2020</p>
-        </div>
-
-        <div class="button">
-          <button class="button-icon">
-            <div class="share-icon"></div>
-          </button>
-          <div class="button-invisible"></div>
-          <div class="button-hover">
-            <p>SHARE</p>
-            <img src="./images/icon-facebook.svg" alt="logo">
-            <img src="./images/icon-twitter.svg" alt="logo">
-            <img src="./images/icon-pinterest.svg" alt="logo">
+      <div class="user-section">
+        <div class="user">
+          <img src="./images/avatar-michelle.jpg" alt="avatar">
+          <div class="user-info">
+            <h1>Michelle Appleton</h1>
+            <p>28 Jun 2020</p>
+          </div>
+      
+          <div class="button">
+            <button class="button-icon">
+              <div class="share-icon"></div>
+            </button>
+            <div class="button-invisible"></div>
+            <div class="button-hover">
+              <p>SHARE</p>
+              <img src="./images/icon-facebook.svg" alt="logo">
+              <img src="./images/icon-twitter.svg" alt="logo">
+              <img src="./images/icon-pinterest.svg" alt="logo">
+            </div>
           </div>
         </div>
-      </div>
 
+      </div>
       <div class="attribution">
         Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
         Coded by <a href="#">PrivateDDOS</a>.
@@ -261,20 +308,59 @@
   
 
   <script>
-    // Get the hover area and the invisible share box
+    const user = document.querySelector('.user')
     const shareBtn = document.querySelector('.button')
+    const invisibleBox = document.querySelector('.button-invisible')
     const shareIcon = document.querySelector('.button-hover')
+
+
+    // mobile
+    const shareBtnMobile = document.querySelector('.mobile-btn')
+    const shareIconMobile = document.querySelector('.button-hover-mobile')
+
+    // create a function that remove the .user and replace with share hover content
+    function showShareContent() {
+      user.remove()
+      const shareHover = document.createElement('div');
+      shareHover.classList.add('share-mobile');
+      shareHover.innerHTML = `
+        <div class="button-hover-mobile">
+          <p>SHARE</p>
+          <img src="./images/icon-facebook.svg" alt="logo">
+          <img src="./images/icon-twitter.svg" alt="logo">
+          <img src="./images/icon-pinterest.svg" alt="logo">
+          <button class="mobile-btn">
+            <div class="share-icon-mobile"></div>
+          </button>
+        </div>
+      `;
+      document.querySelector('.user-section').appendChild(shareHover)
+    }
+
 
     // addEventListener to the hover area
     shareBtn.addEventListener('mouseenter', () => {
+      invisibleBox.style.display = 'block';
       shareIcon.style.display = 'flex';
-      console.log('hover')
+      if (window.innerWidth <= 756) {
+        showShareContent();
+      } 
     })
 
+    
+
+    // delete the triangle box when the screen is smaller than 756px
+    function deleteInvisibleBox() {
+      invisibleBox.remove()
+    }
+    
     // addEventListener to the area when leave
     shareBtn.addEventListener('mouseleave', () => {
-      shareIcon.style.display = 'none'
-      console.log('not hover')
+      invisibleBox.style.display = 'none';
+      shareIcon.style.display = 'none';
+      if (window.innerWidth <= 756) {
+        deleteInvisibleBox();
+      }
     })
   </script>
 </body>
